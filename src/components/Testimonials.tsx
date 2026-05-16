@@ -10,7 +10,7 @@ const Testimonials = ({ addToRefs }: Props) => {
   const [displayItems, setDisplayItems] = useState<Testimonial[]>([]);
   const trackRef = useRef<HTMLDivElement>(null);
   const offsetRef = useRef(0);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number>(0);
   const isHovered = useRef(false);
 
   useEffect(() => {
