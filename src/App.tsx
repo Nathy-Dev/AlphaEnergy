@@ -13,30 +13,37 @@ import AdminLogin from './components/admin/AdminLogin'
 import AdminLayout from './components/admin/AdminLayout'
 import PortfolioManager from './components/admin/PortfolioManager'
 import TestimonialManager from './components/admin/TestimonialManager'
-
 function PublicApp() {
   const revealRefs = useRef<(HTMLElement | null)[]>([])
+  const observerRef = useRef<IntersectionObserver | null>(null)
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add('active')
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active')
+            // Once revealed, we can stop observing
+            observerRef.current?.unobserve(entry.target)
+          }
         })
       },
       { threshold: 0.1 }
     )
 
+    // Initial observation
     revealRefs.current.forEach((el) => {
-      if (el) observer.observe(el)
+      if (el) observerRef.current?.observe(el)
     })
 
-    return () => observer.disconnect()
+    return () => observerRef.current?.disconnect()
   }, [])
 
   const addToRefs = (el: HTMLElement | null) => {
     if (el && !revealRefs.current.includes(el)) {
       revealRefs.current.push(el)
+      // If the observer is already set up, observe this new element immediately
+      observerRef.current?.observe(el)
     }
   }
 
