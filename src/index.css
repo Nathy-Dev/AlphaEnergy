@@ -315,6 +315,43 @@ section { padding: 80px 20px; }
 .contact-form select:focus { border-color: var(--color-accent); }
 .contact-form select option { background: var(--color-surface); color: var(--color-text); }
 
+/* ══════════════ TESTIMONIALS ══════════════ */
+.testimonials-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+.testimonial-card {
+  padding: 32px; position: relative; overflow: hidden;
+  transition: all 0.4s var(--ease);
+}
+.testimonial-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+  opacity: 0; transition: opacity 0.4s;
+}
+.testimonial-card:hover { transform: translateY(-4px); border-color: rgba(193,127,69,0.2); }
+.testimonial-card:hover::before { opacity: 1; }
+.testimonial-quote-icon {
+  font-size: 1.6rem; color: rgba(193,127,69,0.15); margin-bottom: 12px;
+}
+.testimonial-text {
+  font-size: 0.95rem; color: var(--color-text-dim); line-height: 1.8;
+  font-style: italic; margin-bottom: 24px;
+}
+.testimonial-author {
+  display: flex; align-items: center; gap: 14px;
+  border-top: 1px solid var(--color-border); padding-top: 20px;
+}
+.testimonial-avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-light));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.1rem;
+  color: #fff; flex-shrink: 0;
+}
+.testimonial-name { font-size: 0.95rem; font-weight: 600; }
+.testimonial-role { font-size: 0.8rem; color: var(--color-accent); margin-top: 2px; }
+
 /* ══════════════ FOOTER ══════════════ */
 .footer {
   background: var(--color-surface); border-top: 1px solid var(--color-border);
@@ -377,6 +414,7 @@ section { padding: 80px 20px; }
   .stat-item::after { display: none !important; }
   .footer-grid { grid-template-columns: 1fr; }
   .portfolio-grid { grid-template-columns: 1fr; }
+  .testimonials-grid { grid-template-columns: 1fr; }
   .services-grid { grid-template-columns: 1fr; }
   .contact-form { padding: 20px 16px; }
 }

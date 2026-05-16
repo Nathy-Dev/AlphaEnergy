@@ -61,6 +61,14 @@ export default function AdminLayout() {
           >
             <i className="fas fa-images" style={{ width: '20px' }}></i> Portfolio Manager
           </Link>
+          <Link 
+            to="/admin/testimonials" 
+            className="btn btn-outline" 
+            style={{ justifyContent: 'flex-start', border: 'none', background: 'rgba(193,127,69,0.1)', color: 'var(--color-accent)' }}
+            onClick={closeSidebar}
+          >
+            <i className="fas fa-comment-dots" style={{ width: '20px' }}></i> Testimonials
+          </Link>
         </nav>
         
         <button onClick={handleLogout} className="btn btn-outline" style={{ marginTop: 'auto' }}>
