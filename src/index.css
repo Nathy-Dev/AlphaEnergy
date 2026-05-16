@@ -331,7 +331,6 @@ section { padding: 80px 20px; }
 
 .testimonials-marquee-track {
   display: flex;
-  gap: 20px;
   width: max-content;
   animation: marqueeRight 40s linear infinite;
 }
@@ -343,6 +342,7 @@ section { padding: 80px 20px; }
 .testimonial-card {
   width: 380px;
   flex-shrink: 0;
+  margin-right: 20px;
   padding: 32px;
   position: relative;
   overflow: hidden;
