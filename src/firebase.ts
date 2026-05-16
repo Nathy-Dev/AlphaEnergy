@@ -14,6 +14,11 @@ const firebaseConfig = {
 let app, db: any, auth: any;
 
 try {
+  // Check if we are using dummy values
+  if (firebaseConfig.apiKey === 'dummy_key') {
+    console.warn("Firebase API Key is missing. Check your .env.local file and ensure variables start with VITE_");
+  }
+  
   app = initializeApp(firebaseConfig);
   db = getFirestore(app);
   auth = getAuth(app);
