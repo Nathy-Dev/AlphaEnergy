@@ -32,3 +32,6 @@ dist-ssr
 
 # Build tools
 .vite/
+
+.vercel
+.env*.local

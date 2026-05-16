@@ -6,9 +6,9 @@ export default async function handler(req: any, res: any) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const { fileName, fileType, bucketName } = req.body;
+  const { fileName, fileType } = req.body;
 
-  if (!fileName || !fileType || !bucketName) {
+  if (!fileName || !fileType) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
@@ -30,11 +30,11 @@ export default async function handler(req: any, res: any) {
       forcePathStyle: true,
     });
 
-    const uniqueIdentifier = `alpha-energy-portfolio-${bucketName}-${Date.now()}`.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+    const itemIdentifier = 'alpha-energy-portfolio-media';
     const safeFileName = fileName.replace(/[^a-zA-Z0-9.\-_]/g, '_');
 
     const command = new PutObjectCommand({
-      Bucket: uniqueIdentifier,
+      Bucket: itemIdentifier,
       Key: safeFileName,
       ContentType: fileType,
     });
@@ -43,7 +43,7 @@ export default async function handler(req: any, res: any) {
     const presignedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
     
     // Also return the final public URL where the file will be accessible after upload
-    const publicUrl = `https://archive.org/download/${uniqueIdentifier}/${safeFileName}`;
+    const publicUrl = `https://archive.org/download/${itemIdentifier}/${safeFileName}`;
 
     res.status(200).json({ presignedUrl, publicUrl });
   } catch (error: any) {

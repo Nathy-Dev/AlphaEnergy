@@ -6,10 +6,8 @@
  * @param title A unique identifier/bucket name for the item
  * @returns The public URL of the uploaded file
  */
-export const uploadToInternetArchive = async (file: File, title: string): Promise<string> => {
+export const uploadToInternetArchive = async (file: File): Promise<string> => {
   // 1. Get the secure presigned URL from our Vercel backend
-  const bucketName = title.replace(/[^a-z0-9]/gi, '-').toLowerCase();
-  
   const response = await fetch('/api/get-upload-url', {
     method: 'POST',
     headers: {
@@ -17,8 +15,7 @@ export const uploadToInternetArchive = async (file: File, title: string): Promis
     },
     body: JSON.stringify({
       fileName: file.name,
-      fileType: file.type,
-      bucketName: bucketName
+      fileType: file.type
     })
   });
 

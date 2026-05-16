@@ -32,9 +32,7 @@ export default function PortfolioForm({ item, onClose }: Props) {
       let finalMediaUrl = mediaUrl;
 
       if (file) {
-        // Generate a safe bucket name based on the title
-        const bucketName = title.replace(/[^a-z0-9]/gi, '-').toLowerCase();
-        finalMediaUrl = await uploadToInternetArchive(file, bucketName);
+        finalMediaUrl = await uploadToInternetArchive(file);
         setMediaUrl(finalMediaUrl);
       } else if (!finalMediaUrl) {
         throw new Error('Please provide a media file or URL.');
