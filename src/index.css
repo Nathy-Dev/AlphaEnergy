@@ -332,11 +332,7 @@ section { padding: 80px 20px; }
 .testimonials-marquee-track {
   display: flex;
   width: max-content;
-  animation: marqueeRight 40s linear infinite;
-}
-
-.testimonials-marquee-track:hover {
-  animation-play-state: paused;
+  will-change: transform;
 }
 
 .testimonial-card {
