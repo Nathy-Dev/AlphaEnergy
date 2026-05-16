@@ -33,31 +33,51 @@ const Testimonials = ({ addToRefs }: Props) => {
         ) : testimonials.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '40px', color: 'var(--color-text-dim)' }}>No testimonials yet.</div>
         ) : (
-          <div className="testimonials-grid">
-            {testimonials.map((t, i) => (
-              <div
-                key={t.id || i}
-                className={`testimonial-card glass reveal reveal-delay-${(i % 4) + 1}`}
-                ref={addToRefs}
-              >
-                <div className="testimonial-quote-icon">
-                  <i className="fas fa-quote-left" />
-                </div>
-                <div style={{ display: 'flex', gap: '3px', marginBottom: '16px' }}>
-                  {renderStars(t.rating)}
-                </div>
-                <p className="testimonial-text">"{t.testimonial}"</p>
-                <div className="testimonial-author">
-                  <div className="testimonial-avatar">
-                    {t.name.charAt(0).toUpperCase()}
+          <div className="testimonials-marquee-container reveal" ref={addToRefs}>
+            <div className="testimonials-marquee-track">
+              {/* First set of testimonials */}
+              {testimonials.map((t, i) => (
+                <div key={`${t.id || i}-1`} className="testimonial-card glass">
+                  <div className="testimonial-quote-icon">
+                    <i className="fas fa-quote-left" />
                   </div>
-                  <div>
-                    <h4 className="testimonial-name">{t.name}</h4>
-                    <p className="testimonial-role">{t.portfolio}</p>
+                  <div style={{ display: 'flex', gap: '3px', marginBottom: '16px' }}>
+                    {renderStars(t.rating)}
+                  </div>
+                  <p className="testimonial-text">"{t.testimonial}"</p>
+                  <div className="testimonial-author">
+                    <div className="testimonial-avatar">
+                      {t.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <h4 className="testimonial-name">{t.name}</h4>
+                      <p className="testimonial-role">{t.portfolio}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+              {/* Duplicate set for seamless looping */}
+              {testimonials.map((t, i) => (
+                <div key={`${t.id || i}-2`} className="testimonial-card glass">
+                  <div className="testimonial-quote-icon">
+                    <i className="fas fa-quote-left" />
+                  </div>
+                  <div style={{ display: 'flex', gap: '3px', marginBottom: '16px' }}>
+                    {renderStars(t.rating)}
+                  </div>
+                  <p className="testimonial-text">"{t.testimonial}"</p>
+                  <div className="testimonial-author">
+                    <div className="testimonial-avatar">
+                      {t.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <h4 className="testimonial-name">{t.name}</h4>
+                      <p className="testimonial-role">{t.portfolio}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
