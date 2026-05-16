@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { usePortfolio, PortfolioItem } from '../../hooks/usePortfolio';
+import { usePortfolioActions, PortfolioItem } from '../../hooks/usePortfolio';
 import { uploadToInternetArchive } from '../../utils/archiveUpload';
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 }
 
 export default function PortfolioForm({ item, onClose }: Props) {
-  const { addItem, updateItem } = usePortfolio();
+  const { addItem, updateItem } = usePortfolioActions();
   
   const [title, setTitle] = useState(item?.title || '');
   const [description, setDescription] = useState(item?.description || '');
