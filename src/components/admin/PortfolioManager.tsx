@@ -34,7 +34,7 @@ export default function PortfolioManager() {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+      <div className="admin-page-header">
         <h2>Portfolio Manager</h2>
         <button onClick={handleAddNew} className="btn btn-primary">
           <i className="fas fa-plus"></i> Add New Item
@@ -42,8 +42,8 @@ export default function PortfolioManager() {
       </div>
 
       {isFormOpen ? (
-        <div className="glass" style={{ padding: '32px', marginBottom: '32px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px' }}>
+        <div className="glass" style={{ padding: '24px', marginBottom: '32px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
             <h3>{editingItem ? 'Edit Item' : 'Create New Item'}</h3>
             <button onClick={() => setIsFormOpen(false)} className="btn btn-outline" style={{ padding: '8px 16px' }}>Cancel</button>
           </div>
@@ -51,10 +51,10 @@ export default function PortfolioManager() {
         </div>
       ) : null}
 
-      <div className="portfolio-grid" style={{ marginTop: '0', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))' }}>
+      <div className="admin-grid">
         {items.map(item => (
-          <div key={item.id} className="glass" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <div style={{ width: '100%', aspectRatio: '16/9', background: '#000', borderRadius: '8px', overflow: 'hidden', position: 'relative' }}>
+          <div key={item.id} className="glass admin-card">
+            <div className="admin-card-media">
               {item.mediaType === 'video' ? (
                 <video src={item.mediaUrl} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted />
               ) : (
@@ -65,7 +65,7 @@ export default function PortfolioManager() {
               </div>
             </div>
             
-            <div style={{ flex: 1 }}>
+            <div className="admin-card-content">
               <h4 style={{ marginBottom: '4px' }}>{item.title}</h4>
               <p style={{ fontSize: '0.85rem', color: 'var(--color-text-dim)' }}>
                 <i className="fas fa-map-marker-alt" style={{ marginRight: '6px' }}></i>
@@ -73,7 +73,7 @@ export default function PortfolioManager() {
               </p>
             </div>
             
-            <div style={{ display: 'flex', gap: '8px', marginTop: 'auto' }}>
+            <div className="admin-card-actions">
               <button onClick={() => handleEdit(item)} className="btn btn-outline" style={{ flex: 1, padding: '8px' }}>Edit</button>
               <button onClick={() => item.id && handleDelete(item.id)} className="btn btn-outline" style={{ flex: 1, padding: '8px', borderColor: '#ff4444', color: '#ff4444' }}>Delete</button>
             </div>

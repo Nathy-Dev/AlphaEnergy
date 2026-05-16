@@ -380,3 +380,137 @@ section { padding: 80px 20px; }
   .services-grid { grid-template-columns: 1fr; }
   .contact-form { padding: 20px 16px; }
 }
+
+/* ══════════════ ADMIN DASHBOARD ══════════════ */
+.admin-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--color-bg);
+}
+
+.admin-header-mobile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.admin-sidebar {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 280px;
+  height: 100vh;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  transition: left 0.4s var(--ease);
+}
+
+.admin-sidebar.open {
+  left: 0;
+}
+
+.admin-sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.admin-sidebar-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.admin-content {
+  flex: 1;
+  padding: 24px 20px;
+  overflow-x: hidden;
+}
+
+.admin-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+@media (min-width: 640px) {
+  .admin-page-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.admin-card {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-card-media {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.admin-card-content {
+  flex: 1;
+}
+
+.admin-card-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+}
+
+@media (min-width: 1024px) {
+  .admin-layout {
+    flex-direction: row;
+  }
+
+  .admin-header-mobile {
+    display: none;
+  }
+
+  .admin-sidebar {
+    position: sticky;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    border-radius: 0;
+  }
+
+  .admin-sidebar-overlay {
+    display: none;
+  }
+
+  .admin-content {
+    padding: 48px;
+  }
+}

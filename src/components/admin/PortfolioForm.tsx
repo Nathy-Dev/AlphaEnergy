@@ -63,8 +63,8 @@ export default function PortfolioForm({ item, onClose }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="contact-form" style={{ padding: 0 }}>
-      {error && <div style={{ color: '#ff4444', marginBottom: '16px', fontSize: '0.9rem' }}>{error}</div>}
+    <form onSubmit={handleSubmit} className="contact-form" style={{ padding: 0, gap: '16px' }}>
+      {error && <div style={{ color: '#ff4444', marginBottom: '8px', fontSize: '0.9rem' }}>{error}</div>}
       
       <div className="form-row">
         <div>
@@ -100,20 +100,20 @@ export default function PortfolioForm({ item, onClose }: Props) {
         <textarea value={description} onChange={e => setDescription(e.target.value)} required rows={4} />
       </div>
 
-      <div className="glass" style={{ padding: '20px', border: '1px dashed var(--color-accent)' }}>
-        <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.9rem' }}>Upload Media File (Internet Archive)</label>
+      <div className="glass" style={{ padding: '16px', border: '1px dashed var(--color-accent)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <label style={{ display: 'block', fontSize: '0.9rem' }}>Upload Media File (Internet Archive)</label>
         <input 
           type="file" 
           ref={fileInputRef}
           accept={mediaType === 'image' ? 'image/*' : 'video/*'}
           onChange={e => setFile(e.target.files?.[0] || null)}
-          style={{ background: 'transparent', border: 'none', padding: '0', cursor: 'pointer' }}
+          style={{ background: 'transparent', border: 'none', padding: '0', cursor: 'pointer', fontSize: '0.85rem' }}
         />
-        {file && <p style={{ marginTop: '8px', fontSize: '0.85rem', color: 'var(--color-accent-light)' }}>Selected: {file.name}</p>}
+        {file && <p style={{ fontSize: '0.85rem', color: 'var(--color-accent-light)' }}>Selected: {file.name}</p>}
         
-        <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={{ flex: 1, height: '1px', background: 'var(--color-border)' }}></div>
-          <span style={{ fontSize: '0.8rem', color: 'var(--color-text-dim)' }}>OR PROVIDE URL</span>
+          <span style={{ fontSize: '0.7rem', color: 'var(--color-text-dim)', whiteSpace: 'nowrap' }}>OR PROVIDE URL</span>
           <div style={{ flex: 1, height: '1px', background: 'var(--color-border)' }}></div>
         </div>
         
@@ -122,13 +122,13 @@ export default function PortfolioForm({ item, onClose }: Props) {
           placeholder="https://..." 
           value={mediaUrl} 
           onChange={e => setMediaUrl(e.target.value)}
-          style={{ marginTop: '16px' }}
           disabled={!!file}
+          style={{ fontSize: '0.9rem' }}
         />
       </div>
 
-      <button type="submit" className="btn btn-primary" disabled={loading} style={{ alignSelf: 'flex-start' }}>
-        {loading ? 'Saving & Uploading...' : (item ? 'Update Item' : 'Create Item')}
+      <button type="submit" className="btn btn-primary" disabled={loading} style={{ width: '100%', maxWidth: '200px' }}>
+        {loading ? 'Saving...' : (item ? 'Update Item' : 'Create Item')}
       </button>
     </form>
   );
