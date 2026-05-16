@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { collection, query, orderBy, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { useState, useEffect } from 'react';
+import { collection, query, onSnapshot, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 
 export interface PortfolioItem {
@@ -17,51 +17,54 @@ export function usePortfolio() {
   const [items, setItems] = useState<PortfolioItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchItems = useCallback(async () => {
+  useEffect(() => {
     if (!db) {
       console.warn("Firebase Firestore is not initialized. Please check your .env keys.");
       setLoading(false);
       return;
     }
 
-    try {
-      const q = query(collection(db, 'portfolioItems'), orderBy('createdAt', 'desc'));
-      const snapshot = await getDocs(q);
+    // Sort on client to avoid missing index issues and optimistic update exclusions
+    const q = query(collection(db, 'portfolioItems'));
+    
+    const unsubscribe = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map(d => ({
         id: d.id,
         ...d.data()
       })) as PortfolioItem[];
+
+      // Client-side sort: newest first
+      data.sort((a, b) => {
+        const timeA = a.createdAt?.toMillis?.() || Date.now();
+        const timeB = b.createdAt?.toMillis?.() || Date.now();
+        return timeB - timeA;
+      });
+
       setItems(data);
-    } catch (error) {
-      console.error("Error fetching portfolio items:", error);
-    } finally {
       setLoading(false);
-    }
+    }, (error) => {
+      console.error("Error fetching portfolio items:", error);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    fetchItems();
-  }, [fetchItems]);
-
   const addItem = async (item: Omit<PortfolioItem, 'id' | 'createdAt'>) => {
-    const ref = await addDoc(collection(db, 'portfolioItems'), {
+    return await addDoc(collection(db, 'portfolioItems'), {
       ...item,
       createdAt: serverTimestamp()
     });
-    await fetchItems();
-    return ref;
   };
 
   const updateItem = async (id: string, updates: Partial<PortfolioItem>) => {
     const ref = doc(db, 'portfolioItems', id);
     await updateDoc(ref, updates);
-    await fetchItems();
   };
 
   const deleteItem = async (id: string) => {
     const ref = doc(db, 'portfolioItems', id);
     await deleteDoc(ref);
-    await fetchItems();
   };
 
   return { items, loading, addItem, updateItem, deleteItem };

@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { collection, query, orderBy, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { useState, useEffect } from 'react';
+import { collection, query, onSnapshot, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 
 export interface Testimonial {
@@ -15,51 +15,56 @@ export function useTestimonials() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchTestimonials = useCallback(async () => {
+  useEffect(() => {
     if (!db) {
       console.warn("Firebase Firestore is not initialized.");
       setLoading(false);
       return;
     }
 
-    try {
-      const q = query(collection(db, 'testimonials'), orderBy('createdAt', 'desc'));
-      const snapshot = await getDocs(q);
+    // Remove orderBy from server-side to avoid issues with null fields (optimistic updates)
+    // and missing indexes. We will sort on the client instead.
+    const q = query(collection(db, 'testimonials'));
+    
+    const unsubscribe = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map(d => ({
         id: d.id,
         ...d.data()
       })) as Testimonial[];
+      
+      // Sort on client: newest first
+      // Handle cases where createdAt might be null (optimistic) or a Firestore Timestamp
+      data.sort((a, b) => {
+        const timeA = a.createdAt?.toMillis?.() || Date.now();
+        const timeB = b.createdAt?.toMillis?.() || Date.now();
+        return timeB - timeA;
+      });
+
       setTestimonials(data);
-    } catch (error) {
-      console.error("Error fetching testimonials:", error);
-    } finally {
       setLoading(false);
-    }
+    }, (error) => {
+      console.error("Error fetching testimonials:", error);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    fetchTestimonials();
-  }, [fetchTestimonials]);
-
   const addTestimonial = async (item: Omit<Testimonial, 'id' | 'createdAt'>) => {
-    const ref = await addDoc(collection(db, 'testimonials'), {
+    return await addDoc(collection(db, 'testimonials'), {
       ...item,
       createdAt: serverTimestamp()
     });
-    await fetchTestimonials();
-    return ref;
   };
 
   const updateTestimonial = async (id: string, updates: Partial<Testimonial>) => {
     const ref = doc(db, 'testimonials', id);
     await updateDoc(ref, updates);
-    await fetchTestimonials();
   };
 
   const deleteTestimonial = async (id: string) => {
     const ref = doc(db, 'testimonials', id);
     await deleteDoc(ref);
-    await fetchTestimonials();
   };
 
   return { testimonials, loading, addTestimonial, updateTestimonial, deleteTestimonial };
