@@ -14,9 +14,15 @@ const firebaseConfig = {
 let app, db: any, auth: any;
 
 try {
-  // Check if we are using dummy values
-  if (firebaseConfig.apiKey === 'dummy_key') {
-    console.warn("Firebase API Key is missing. Check your .env.local file and ensure variables start with VITE_");
+  // Diagnostic logs (safe to leave during debugging)
+  const missingKeys = [];
+  if (firebaseConfig.apiKey === 'dummy_key') missingKeys.push('VITE_FIREBASE_API_KEY');
+  if (firebaseConfig.authDomain === 'dummy.firebaseapp.com') missingKeys.push('VITE_FIREBASE_AUTH_DOMAIN');
+  if (firebaseConfig.projectId === 'dummy_project') missingKeys.push('VITE_FIREBASE_PROJECT_ID');
+
+  if (missingKeys.length > 0) {
+    console.error("Firebase Configuration Error: The following environment variables are missing or using dummy values:", missingKeys);
+    console.warn("Ensure your .env.local file contains these keys and that they are prefixed with 'VITE_'.");
   }
   
   app = initializeApp(firebaseConfig);
