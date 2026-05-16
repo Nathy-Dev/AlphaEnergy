@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { usePortfolioActions, PortfolioItem } from '../../hooks/usePortfolio';
-import { uploadToInternetArchive } from '../../utils/archiveUpload';
+import { uploadToCloudinary } from '../../utils/cloudinaryUpload';
 
 interface Props {
   item: PortfolioItem | null;
@@ -32,7 +32,7 @@ export default function PortfolioForm({ item, onClose }: Props) {
       let finalMediaUrl = mediaUrl;
 
       if (file) {
-        finalMediaUrl = await uploadToInternetArchive(file);
+        finalMediaUrl = await uploadToCloudinary(file);
         setMediaUrl(finalMediaUrl);
       } else if (!finalMediaUrl) {
         throw new Error('Please provide a media file or URL.');
@@ -101,7 +101,7 @@ export default function PortfolioForm({ item, onClose }: Props) {
       </div>
 
       <div className="glass" style={{ padding: '16px', border: '1px dashed var(--color-accent)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        <label style={{ display: 'block', fontSize: '0.9rem' }}>Upload Media File (Internet Archive)</label>
+        <label style={{ display: 'block', fontSize: '0.9rem' }}>Upload Media File</label>
         <input 
           type="file" 
           ref={fileInputRef}
