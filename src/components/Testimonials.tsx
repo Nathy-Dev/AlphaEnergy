@@ -15,31 +15,40 @@ const Testimonials = ({ addToRefs }: Props) => {
 
   useEffect(() => {
     if (testimonials.length > 0) {
-      setDisplayItems(testimonials);
+      let repeated = [...testimonials];
+      // Ensure we have enough items so the track covers large screens to hide the off-screen shift
+      while (repeated.length < 8) {
+        repeated = [...repeated, ...testimonials];
+      }
+      setDisplayItems(repeated);
     }
   }, [testimonials]);
 
   useEffect(() => {
-    if (displayItems.length < 2) return;
+    if (testimonials.length < 2) return;
 
     const cardWidth = 400; // 380px width + 20px margin
+    let currentOffset = 0;
     
     const animate = () => {
       if (!isHovered.current) {
-        offsetRef.current += 0.8; // Speed
+        currentOffset += 0.8; // Speed
 
-        if (offsetRef.current >= cardWidth) {
-          offsetRef.current = 0;
-          setDisplayItems(prev => {
-            const newItems = [...prev];
-            const lastItem = newItems.pop();
-            if (lastItem) newItems.unshift(lastItem);
-            return newItems;
-          });
+        if (currentOffset >= cardWidth) {
+          currentOffset -= cardWidth;
+          
+          if (trackRef.current && trackRef.current.children.length > 0) {
+            // Move the last child to the front to create the rightward perpetual motion
+            const lastChild = trackRef.current.lastElementChild;
+            if (lastChild) {
+              trackRef.current.insertBefore(lastChild, trackRef.current.firstElementChild);
+            }
+          }
         }
 
         if (trackRef.current) {
-          trackRef.current.style.transform = `translateX(${offsetRef.current - cardWidth}px)`;
+          // Track is shifted left by 1 card, and moves towards 0
+          trackRef.current.style.transform = `translateX(${-cardWidth + currentOffset}px)`;
         }
       }
       animationRef.current = requestAnimationFrame(animate);
